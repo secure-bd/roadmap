@@ -386,36 +386,35 @@ Job-ready proof of skills (audit reports + reproducible labs)।
 
 ---
 
-# 🔎 Security A→Z — Tools / Techniques / Systems (line-by-line)
+## 🔎 Security A–Z — Tools / Techniques / Systems
 
-> নিচে A থেকে Z পর্যন্ত প্রধান tools, techniques এবং systems — প্রতি আইটেম আলাদা লাইনে দেয়া হয়েছে (GitHub README-ফ্রেন্ডলি)।
+**A —** ASLR / ASan / Auditing  
+**B —** Buffer overflow / Binary diffing  
+**C —** Crypto / Constant-time / Code review  
+**D —** Debugging / Dependency scanning / Disclosure  
+**E —** Exploit development / Electric Fence / E2E testing  
+**F —** Fuzzing / Format checks / File integrity monitoring (FIM)  
+**G —** GDB / Gadget hunt / Git patching  
+**H —** Heap analysis / Hardening / HSTS  
+**I —** Injection prevention / IDS / Input validation  
+**J —** JSON / XML parsing security / JIT considerations  
+**K —** Kernel surface / Kcov / KASLR  
+**L —** Logging / Least privilege / Libc audits  
+**M —** Mitigations matrix / Memory Tagging (MTE where available)  
+**N —** Network monitoring / Nmap / NSS / OpenSSL  
+**O —** OSINT / OWASP cases / OSS security lists  
+**P —** Privilege separation / PIE / Patching  
+**Q —** QEMU / Queryable telemetry / QoS limits  
+**R —** ROP / Radare2 / Runtime integrity checks  
+**S —** Seccomp / Sandboxing / Static analysis  
+**T —** Threat modeling / TSan / Timing attacks  
+**U —** Use-after-free detection / Unit tests / UX for security  
+**V —** Vulnerability scanning / Vulnerability disclosure platforms  
+**W —** Web request smuggling / Wireshark / WAF  
+**X —** eXploit chaining / eXecutable hardening  
+**Y —** Yield (race conditions) / YAML / serialization checks  
+**Z —** Zero-day study / ZAP (OWASP) / zlib edge cases
 
-**A — ASLR / ASan / Auditing**
-**B — Buffer overflow / Binary diffing**
-**C — Crypto / Constant-time / Code review**
-**D — Debugging / Dependency scanning / Disclosure**
-**E — Exploit development / Electric Fence / E2E testing**
-**F — Fuzzing / Format checks / File integrity monitoring (FIM)**
-**G — GDB / Gadget hunt / Git patching**
-**H — Heap analysis / Hardening / HSTS**
-**I — Injection prevention / IDS / Input validation**
-**J — JSON / XML parsing security / JIT considerations**
-**K — Kernel surface / Kcov / KASLR**
-**L — Logging / Least privilege / Libc audits**
-**M — Mitigations matrix / Memory Tagging (MTE where available)**
-**N — Network monitoring / Nmap / NSS/OpenSSL**
-**O — OSINT / OWASP cases / OSS security lists**
-**P — Privilege separation / PIE / Patching**
-**Q — QEMU / Queryable telemetry / QoS limits**
-**R — ROP / Radare2 / Runtime integrity checks**
-**S — Seccomp / Sandboxing / Static analysis**
-**T — Threat modeling / TSan / Timing attacks**
-**U — Use-after-free detection / Unit tests / UX for security**
-**V — Vulnerability scanning / Vulnerability disclosure platforms**
-**W — Web request smuggling / Wireshark / WAF**
-**X — eXploit chaining / eXecutable hardening**
-**Y — Yield (race conditions) / YAML/serialization checks**
-**Z — Zero-day study / ZAP (OWASP) / zlib edge cases**
 
 ---
 

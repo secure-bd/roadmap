@@ -1,266 +1,326 @@
-# [Roadmap](https://roadmap.sh/cyber-security)
+# 🔐 C-ভিত্তিক Security Engineer রোডম্যাপ: Beginner → Advanced (Step-by-Step)
 
-# 🔐 Security Engineer–Focused C Learning Roadmap
-
-## 🟢 ধাপ ১: Fundamentals with Secure Coding
-
-👉 লক্ষ্য: buffer overflow, pointer misuse, memory leaks ধরতে শেখা।
-
-1. **[CWE-121/122 Test Cases](https://github.com/OWASP/Benchmark)** → ছোট C কোডবেস যেখানে vulnerability আছে।
-
-   * শিখবে: buffer overflow, heap overflow, stack smashing।
-
-2. **[libsafe](https://sourceforge.net/projects/libsafe/)** → old security wrapper library।
-
-   * শিখবে: unsafe functions (gets, strcpy, sprintf) এর safe বিকল্প।
-
-3. **GNU Coreutils**
-
-   * শিখবে: real-world C কোডে input validation, system call errors।
-
-⏳ সময়: ১–২ মাস (base strong করার জন্য)।
+*(ভিত্তি: [roadmap.sh/cyber-security](https://roadmap.sh/cyber-security) থেকে অনুপ্রাণিত — তবে C-ফোকাসড, defensive + offensive ভারসাম্য।)*
 
 ---
 
-## 🟡 ধাপ ২: Memory-Heavy & Network Programs
+## 📋 সারমর্ম
 
-👉 লক্ষ্য: data corruption, race conditions, DoS, socket exploits বোঝা।
+এই রোডম্যাপটি C প্রোগ্রামিং থেকে শুরু করে একজন Security Engineer হিসেবে A→Z দক্ষতা অর্জনের জন্য ডিজাইন করা।
+ফোকাস: **defensive security** (secure coding, hardening, auditing) এবং **offensive security** (vuln analysis, exploit research)। প্রতিটি ধাপ হাতেকলমে (code + lab): কোড লেখা, ডিবাগ, অডিট এবং ল্যাব এক্সপেরিমেন্ট।
 
-4. **curl**
-
-   * শিখবে: SSL/TLS, certificate handling, buffer checks।
-   * Security focus: request smuggling, malformed input → কীভাবে handle করে।
-
-5. **Redis**
-
-   * শিখবে: custom memory allocator, event loop security।
-   * Security focus: buffer overflow থেকে RCE কিভাবে প্রতিরোধ করা হয়েছে।
-
-6. **nginx (core modules)**
-
-   * শিখবে: input sanitization, request parsing।
-   * Security focus: request splitting, denial-of-service mitigation।
-
-⏳ সময়: ২–৩ মাস।
+* **প্রগ্রেশন:** Beginner → Intermediate → Advanced → Expert
+* **প্রতি স্টেপে:** প্রজেক্ট/রিসোর্স, টুলস, অভ্যাস, অনুশীলন, measurable milestone (portfolio-ready)
+* **স্ট্র্যাটেজি:** Read real codebases, reproduce পুরনো CVE, debug (gdb/valgrind/ASan), Harden (ASLR/DEP/seccomp)
+* **Ethics:** সবকিছু lab-only (VM/Docker); responsible disclosure মানো।
+* **Suggested flow:** ধাপে ধাপে এগো, তবে CTF এবং fuzzing parallel রেখে চর্চা চালাও।
 
 ---
 
-## 🔵 ধাপ ৩: OS & Privilege Boundaries
+# 📈 Step-by-Step Roadmap
 
-👉 লক্ষ্য: privilege escalation, sandbox escape, syscall exploitation।
+## Step 1 — C Fundamentals & Basic Secure Coding (Beginner)
 
-7. **Linux Kernel (small subsystems)**
-
-   * শিখবে: system calls, process management, device driver।
-   * Security focus: user-space ↔ kernel-space boundary, syscall filtering।
-
-8. **musl libc বা glibc**
-
-   * শিখবে: malloc/free internals, string handling।
-   * Security focus: heap exploitation, format string bugs।
-
-9. **QEMU**
-
-   * শিখবে: VM emulation, device models।
-   * Security focus: guest-to-host escape bugs (heap overflow, use-after-free)।
-
-⏳ সময়: ৪–৬ মাস।
+**Description:** C syntax, pointers, memory model, UB, unsafe API গুলো (e.g., `gets`, `strcpy`) এর safe বিকল্প শেখো; buffer overflow, pointer misuse, memory leaks শনাক্ত ও প্রতিরোধ।
+**Purpose:** C-এর core vulnerabilities বোঝা—input validation ও basic mitigation-এর উপর ভিত্তি তৈরি।
+**Focus projects / resources:** single-file libs (stb), OWASP Benchmark test cases (CWE-121/122), GNU coreutils (parts)
+**Tools:** `gcc`/`clang`, `valgrind`, AddressSanitizer (ASan), UBSan, `clang-tidy`, `make`/`cmake`
+**Practice:** ছোট ছোট C প্রোগ্রাম লিখে ASan/UBSan দিয়ে চালাও; ৫টি vuln-বিনারি reproduce করো
+**Milestone:** ১০টি unsafe function-এর safe wrappers + tests (GitHub repo)
 
 ---
 
-## 🟣 ধাপ ৪: Security Tools & Exploit Dev
+## Step 2 — Build Systems, Debugging & Unit Testing (Beginner → Intermediate)
 
-👉 লক্ষ্য: offensive + defensive mindset তৈরি করা।
-
-10. **[Metasploit C modules](https://github.com/rapid7/metasploit-framework)** (C extensions দেখো)
-
-* শিখবে: exploit code structure।
-
-11. **[pwntools (Python helper) + vulnerable C binaries](https://github.com/Gallopsled/pwntools)**
-
-* শিখবে: exploit crafting against buggy C programs।
-
-12. **[OpenSSL](https://github.com/openssl/openssl)**
-
-* শিখবে: cryptography in C, constant-time coding।
-* Security focus: Heartbleed-type bug থেকে শিক্ষা।
-
-⏳ সময়: ongoing research (৬+ মাস parallel)।
+**Description:** বড় কোডবেস নেভিগেট করা, Make/CMake mastery, debugger (gdb/ lldb) দখল করা; unit tests যোগ করে রিফ্যাক্টর।
+**Purpose:** Real-world debugging → vulnerabilities reproduce ও fix করার দক্ষতা।
+**Focus projects / resources:** simplified GNU coreutils tools, OWASP C cases
+**Tools:** `gdb`, `lldb`, `strace`, `ltrace`, `cscope`/`ctags`, `clangd`, `ccls`, unit test frameworks (libcheck, Criterion)
+**Practice:** breakpoints/step-through দিয়ে runtime analysis; একটি CLI-tool refactor + tests
+**Milestone:** Documented debugging walkthrough (reproduce → fix) with gdb logs & patch
 
 ---
 
-# 📌 শিখবার স্ট্র্যাটেজি (Security Focused)
+## Step 3 — Memory Allocators & Heap Basics (Intermediate)
 
-* **Read**: কোডবেস → কোথায় input নেয়, কীভাবে sanitize করে।
-* **Experiment**: পুরনো CVE exploit করো (lab environment এ)।
-* **Debug**: `gdb`, `valgrind`, `AddressSanitizer (ASan)` দিয়ে memory issues trace করো।
-* **Harden**: দেখো কিভাবে mitigations কাজ করছে (ASLR, DEP, stack canaries, seccomp)।
-
----
-
-⚡ Suggested Flow:
-**(C basics + secure coding)** → **(network & memory-heavy software)** → **(kernel & libc internals)** → **(exploit & defense tools)**
----
-**C-ভিত্তিক Security Engineer হওয়ার ১২ মাসের পূর্ণাঙ্গ ট্রেইনিং রোডম্যাপ**। প্রতিটি মাসে কী-করা উচিত, কোন ওপেন-সোর্স প্রজেক্ট/রিসোর্সে ফোকাস করবে, কী টুল ব্যবহার করবে, এবং মাসের শেষে কোন রকম measurable milestone রাখবে — সবই বাংলা মিশিয়ে সাজিয়েছি। যেহেতু তুমি আগেই C-এ দক্ষ হতে চাও, তাই কোর্সটি হাতেকলমে (code + lab) কেন্দ্র করে বানানো।
-
-# সারমর্ম
-
-* মোট সময়: 12 মাস
-* প্রতিমাসে লক্ষ্য, প্রধান প্রজেক্ট/রিসোর্স, প্রয়োজনীয় টুল/ফ্রেমওয়ার্ক, অনুশীলন (lab/CTF/বাগ-রিপ্রো), মাসান্তে measurable milestone।
-* নিরাপত্তা-ফোকাস: defensive (secure coding, hardening, auditing) + offensive (exploit research, vulnerability analysis) — দুটোই ভারসাম্য রাখেছি।
-* প্রত্যেক মাসে **কোনো একটা ছোট প্রজেক্ট বা রিপোর্ট** সম্পন্ন করবে — পোর্টফোলিওতে যোগ করা যাবে।
+**Description:** `malloc`/`free` internals, heap layout, double free, use-after-free, race conditions; নিজের allocator তৈরি করে বোঝা।
+**Purpose:** Heap corruption শনাক্ত ও mitigations প্রয়োগে পারদর্শী হওয়া।
+**Focus projects / resources:** musl/glibc allocator pieces, Redis allocator behavior
+**Tools:** `valgrind` (memcheck), Electric Fence, GDB heap helpers, ThreadSanitizer (TSan)
+**Practice:** simple bump/free-list allocator লিখো, bugs inject করে detect করো
+**Milestone:** custom allocator repo + heap-corruption demo/report
 
 ---
 
-# মাস 1 — ভিত্তি ও সেফ কোডিং (C fundamentals + secure coding)
+## Step 4 — Networking & Protocol Handling Security (Intermediate)
 
-**লক্ষ্য:** C syntax, pointers, memory model, UB, common unsafe APIs সমাধান।
-**ফোকাস প্রজেক্ট/রিসোর্স:** `stb` single-file libs, ছোট C-example repos, OWASP C examples, GNU Coreutils-এর ছোট অংশ।
-**টুলস:** gcc/clang, valgrind, AddressSanitizer (ASan), UBSan, clang-tidy, make/cmake।
-**অভ্যাস:** প্রতিদিন কনসাইস C সমস্যা (ইনপুট পার্সিং, স্ট্রিং হ্যান্ডলিং) লিখবে এবং ASan/UBSan দিয়ে চালাবে।
-**মাসিক অনুশীলন:** নিরাপদ বিকল্প ব্যবহার করে `strcpy/gets` ধরণের জায়গা পুনর্লিখন; ৫টি ছোট vuln-বিনারি খুঁজে report করবে কেন vulnerable ও কীভাবে mitigate করা যায়।
-**মাইলস্টোন:** ১০টি ছোট unsafe C function (gets/strcpy/sprintf/etc.) খুঁজে প্রতিটির safe রূপ, test-case এবং sanitizer রিপোর্ট সহ একটি GitHub repo তৈরি।
-
----
-
-# মাস 2 — পাইপলাইন: build systems, debugging, unit testing
-
-**লক্ষ্য:** বড় কোডবেসে নেভিগেশন, build system (Make/CMake), debugger mastery।
-**ফোকাস:** GNU Coreutils থেকে একটি ছোট ইউটিলিটি (যেমন `cat` বা `ls` simplified) পড়া/রিফ্যাক্টর।
-**টুলস:** gdb, lldb, strace, ltrace, cscope/ctags, ccls, clangd।
-**অভ্যাস:** প্রতিটা ফাংশন step-through, breakpoints, watchpoints দিয়ে runtime behaviour বিশ্লেষণ।
-**মাসিক অনুশীলন:** একটি ছোট CLI টুল রিফ্যাক্টর করে unit tests যোগ করো (check with libcheck/criterion)।
-**মাইলস্টোন:** একটি documented "debugging walkthrough" তৈরি করো যেখানে তুমি একটি bug from source → reproduce → fix দেখাবে (gdb session logs ও patch)।
+**Description:** sockets, HTTP parsing, TLS basics, malformed input handling; fuzzing malformed requests।
+**Purpose:** Network-facing code harden করা—protocol parsing, DoS, injection ধরনের vulnerabilities কমানোর জন্য।
+**Focus projects / resources:** curl, nginx modules, simple HTTP server
+**Tools:** Wireshark, `tcpdump`, `socat`, OpenSSL CLI, honggfuzz/afl-lite
+**Practice:** simple HTTP server লিখে fuzz করো; crashes থেকে report তৈরি করো
+**Milestone:** fuzzing report + input validation fixes (PR-style docs)
 
 ---
 
-# মাস 3 — memory allocator ও heap basics
+## Step 5 — Static Analysis & Code Auditing (Intermediate)
 
-**লক্ষ্য:** malloc/free internals, heap layout, common heap bugs (double free, use-after-free)।
-**ফোকাস প্রজেক্ট:** musl/glibc-এর allocator অংশ (পাঠযোগ্য অংশ) এবং ছোট allocator implementations (জানতে tiny mallocs)।
-**টুলস:** Valgrind (memcheck), Electric Fence, GDB heap helpers, Heap Exploitation reading (theory)।
-**অভ্যাস:** ছোট allocator লিখে (bump allocator, free list), তারপর intentional bugs inject করে sanitizer/valgrind দিয়ে খুঁজে বের করা।
-**মাসিক অনুশীলন:** একটি ছোট custom allocator তৈরি + unit tests; একটি সাবলীল রিপোর্ট: heap corruption কিভাবে ঘটলো ও detection/mitigation।
-**মাইলস্টোন:** allocator repo + vulnerability demo (only for lab) এবং mitigation strategies সংক্ষেপে documentation।
-
----
-
-# মাস 4 — নেটওয়ার্কিং & প্রোটোকল-হ্যান্ডলিং নিরাপত্তা
-
-**লক্ষ্য:** sockets, HTTP parsing, TLS basics, malformed input handling।
-**ফোকাস প্রজেক্ট:** `curl`-এর সহজ অংশ বা নেট টুলগুলোর ছোট মডিউল পড়া। nginx request parsing অংশ ব্রাউজ করা।
-**টুলস:** Wireshark, tcpdump, socat, OpenSSL command line, fuzzing tools (afl-lite / honggfuzz)।
-**অভ্যাস:** ছোট HTTP server লেখো, malformed requests দিয়ে fuzz করো, sanitizer/logger থেকে findings তৈরি করো।
-**মাসিক অনুশীলন:** একটি সিম্পল HTTP সার্ভার লিখে fuzzing চালাও এবং ২টি crash/behavioural bug রিপোর্ট করো (lab only)।
-**মাইলস্টোন:** fuzzing রিপোর্ট + fixes (input validation) সহ GitHub PR style document।
+**Description:** Static tools দিয়ে vulnerabilities hunt; risky patterns শনাক্ত করা।
+**Purpose:** কোড-রিভিউ ও proactive vulnerability detection করে deploy-এর আগে ফিক্স করা।
+**Focus projects / resources:** audit curl/redis/nginx/libgit2 parts
+**Tools:** clang static analyzer, semgrep, cppcheck, radare2 (r2) for binaries
+**Practice:** ১০টি risky pattern খুঁজে report করো (code snippet + impact)
+**Milestone:** ২০ findings-এর formal audit report (risk classification)
 
 ---
 
-# মাস 5 — static analysis & code auditing
+## Step 6 — Exploit Mitigations & Hardening (Intermediate → Advanced)
 
-**লক্ষ্য:** static analysis tools ব্যবহার করে vulnerability 찾া।
-**ফোকাস:** cppcheck, clang-scan, semgrep (rules), commercial-style patterns (pattern hunting)।
-**টুলস:** clang static analyzer, semgrep, r2 (radare2) for binaries, simple grep/regex hunts।
-**অভ্যাস:** ওপেন-সোর্স প্রজেক্টে (curl/libgit2) ১০ টি suspicious patterns খুঁজে report করো।
-**মাসিক অনুশীলন:** একটি PR-style audit report জমা করো (Code snippet, risk, impact, remediation)।
-**মাইলস্টোন:** ২০টি findings সহ formal audit report (low/medium/high risk classification)।
-
----
-
-# মাস 6 — exploit mitigation ও প্রতিরোধ (DEP, ASLR, canaries, PIE)
-
-**লক্ষ্য:** mitigations কিভাবে কাজ করে ও bypass করার মৌলিক ধারণা (defensive উদ্দেশ্যে)।
-**ফোকাস রিসোর্স:** compiler hardening flags, linker options, seccomp, capabilities।
-**টুলস:** readelf/objdump, ASLR toggle experiments, execve sandboxing, seccomp filter examples।
-**অভ্যাস:** নিজের সিকিউর বাইনারি build করে mitigations on/off করে runtime তুলনা করা।
-**মাসিক অনুশীলন:** একটি ছোট vulnerable app বানানো (lab only), mitigations চালিয়ে কীভাবে prevent হয় তা লিখে রাখো।
-**মাইলস্টোন:** mitigation matrix (which mitigates what), এবং একটি “hardening checklist” তৈরি।
+**Description:** DEP/NX, ASLR, stack canaries, PIE, seccomp, capabilities; mitigations on/off করে টেস্ট।
+**Purpose:** Defensive layers বুঝে প্রয়োগ—attack surface কমানো।
+**Focus projects / resources:** compiler/linker flags, musl/glibc behavior
+**Tools:** `readelf`/`objdump`, ASLR experiments, seccomp examples
+**Practice:** vulnerable app বানিয়ে mitigations চালু/বন্ধ করে compare করো
+**Milestone:** mitigation matrix + hardening checklist doc
 
 ---
 
-# মাস 7 — libc internals & format string / string bugs
+## Step 7 — Libc Internals & String/Format Bugs (Advanced)
 
-**লক্ষ্য:** printf/scanf internals, format string bugs, string parsing pitfalls।
-**ফোকাস প্রজেক্ট:** glibc/musl string routines; Git/libgit2 এ string usage audit।
-**টুলস:** GDB, AddressSanitizer, format string detectors (static rules)।
-**অভ্যাস:** format string vulnerability examples নিয়ে safe testcases লিখে mitigations প্রমাণ করো।
-**মাসিক অনুশীলন:** একটি ছোট audit: প্রজেক্টে जहाँ printf/scanf ব্যবহৃত হয়েছে সেখানে review ও fix PR।
-**মাইলস্টোন:** format string vulnerability detection + remediation report।
-
----
-
-# মাস 8 — exploit development (lab), ROP basics (offensive knowledge for defense)
-
-**লক্ষ্য:** ROP conceptual understanding, stack control, gadget discovery — *lab only, ethical*।
-**ফোকাস রিসোর্স:** ROP Emporium style challenges (lab/CTF), pwntools গাইড (to automate tests)।
-**টুলস:** pwntools (Python), ROPgadget, radare2/ghidra (for analysis), vulnerable VMs (local).
-**অভ্যাস:** controlled lab: একটি intentionally vulnerable C binary নিয়ে gadget discovery (no public exploit disclosure)।
-**মাসিক অনুশীলন:** একটি short writeup: vulnerability → gadget discovery → defensive countermeasures (ASLR/PIE/Canaries)।
-**মাইলস্টোন:** ROP concept writeup + demo scripts that show detection/hardening (no public exploit).
+**Description:** `printf`/`scanf` internals, format string vulnerabilities, string parsing pitfalls; safe routines audit।
+**Purpose:** Format string ও string-related vulnerabilities ধরা ও রিমিডিয়েট করা।
+**Focus projects / resources:** glibc/musl string impls, libgit2 string audit
+**Tools:** GDB, ASan, static format detectors, format fuzzers
+**Practice:** format string examples তৈরি করে exploit/patch দেখাও
+**Milestone:** detection + remediation report for format bugs
 
 ---
 
-# মাস 9 — TLS/crypto in C & OpenSSL auditing
+## Step 8 — Exploit Development & ROP Basics (Advanced — Ethical, Lab-Only)
 
-**লক্ষ্য:** OpenSSL code structure, constant-time coding, common crypto mistakes।
-**ফোকাস প্রজেক্ট:** OpenSSL (parts), small TLS client/server examples।
-**টুলস:** OpenSSL CLI, valgrind, ASan, static analyzers for crypto code.
-**অভ্যাস:** small crypto routine implement করে timing analysis; constant-time testing।
-**মাসিক অনুশীলন:** Heartbleed-style historical CVE study (what went wrong & how fixed)।
-**মাইলস্টোন:** crypto audit checklist + one small demo showing a timing risk and how to fix it.
-
----
-
-# মাস 10 — kernel boundary & syscall security
-
-**লক্ষ্য:** user↔kernel boundary, syscall surface reduction, seccomp, capabilities, kernel exploit surface (theory + reading)。
-**ফোকাস প্রজেক্ট:** small kernel modules reading, syscall handlers, seccomp examples.
-**টুলস:** kernel source (browse), strace, perf, kcov (if applicable), minikernel exercises (qemu usermode).
-**অভ্যাস:** userland program that uses seccomp sandbox, measure allowed syscalls and reduce.
-**মাসিক অনুশীলন:** implement seccomp profile for a small server and test feature parity vs security。
-**মাইলস্টোন:** seccomp profile + report showing reduced syscall surface and test results。
+**Description:** ROP concepts, stack control, gadget discovery; controlled vulnerable binaries-এ exploit লেখা।
+**Purpose:** Offensive ধারণা থেকে defense-improvements ডিজাইন করা।
+**Focus projects / resources:** ROP Emporium, pwntools challenges, vulnerable C binaries
+**Tools:** pwntools, ROPgadget, radare2, Ghidra, QEMU
+**Practice:** lab binary-এ gadget hunt, controlled ROP chain তৈরি ও mitigation tests
+**Milestone:** ROP writeup + demo scripts for detection/hardening
 
 ---
 
-# মাস 11 — incident response & binary patching / secure deployment
+## Step 9 — TLS & Crypto in C, Auditing (Advanced)
 
-**লক্ষ্য:** vuln discovery lifecycle → patching → CVE disclosure ethics → secure deployment।
-**ফোকাস:** backporting patches, creating minimal repro, creating mitigations, responsible disclosure process।
-**টুলস:** patch tools (git), binary diffing (bindiff / radiff2), CI pipelines for security checks.
-**অভ্যাস:** একটি ছোট vulnerability শনাক্ত → patch → create test → upstream PR submit (mock or real)。
-**মাসিক অনুশীলন:** supply-chain scenario: package update করা এবং integration tests চালানো (CI)।
-**মাইলস্টোন:** একটি complete vuln → patch → test → deploy pipeline documented।
-
----
-
-# মাস 12 — ক্যাপস্টোন প্রজেক্ট + পোর্টফোলিও + জব প্রস্তুতি
-
-**লক্ষ্য:** প্রতি মাসে শেখা সবকিছু মিলে একটি বড় ক্যাপস্টোন নিয়ে কাজ করা; রেজ্যুমে/পোর্টফোলিও তৈরি।
-**ক্যাপস্টোন আইডিয়া (পছন্দমত একটিতে কাজ করো):**
-
-* A. **Secure HTTP proxy in C**: input validation, TLS, seccomp sandbox, logging, fuzzed & hardened.
-* B. **Mini static analyzer for C security patterns**: custom semgrep-like rules for common C vuln patterns.
-* C. **Memory-hardened allocator library**: with mitigations (canaries, safe free patterns) and benchmarks.
-  **টুলস:** যতটুকু প্রয়োজন (gcc/clang, fuzzers, CI, sanitizer, dockerized labs)।
-  **অভ্যাস:** প্রতিদিন 2-4 ঘন্টা কোড/ডক, সপ্তাহে 1-2 দিন রিপোর্ট/ডক লেখা।
-  **মাসিক অনুশীলন:** সম্পূর্ণ প্রজেক্টের README, tests, demo video (short), এবং security audit রিপোর্ট।
-  **মাইলস্টোন:** ক্যাপস্টোন repo + ১-২ পেজের Project Summary (skills demonstrated), CV-ready artifact।
+**Description:** OpenSSL структура, constant-time coding, common crypto mistakes; timing/side-channel পরীক্ষা।
+**Purpose:** Confidentiality/integrity বজায় রাখতে secure crypto impl করা।
+**Focus projects / resources:** OpenSSL lessons (Heartbleed case study), small TLS client/server projects
+**Tools:** OpenSSL CLI, valgrind, ASan, timing measurement tools
+**Practice:** crypto routine লিখে timing tests; constant-time verification
+**Milestone:** crypto audit checklist + timing risk demo & fixes
 
 ---
 
-# অতিরিক্ত resources ও অভ্যাস (সারা বছর জুড়ে)
+## Step 10 — Kernel Boundaries & Syscall Security (Expert)
 
-* **CTF/Practice platforms:** TryHackMe, HackTheBox, ROP Emporium, pwnable.kr — *lab/ethical use only*.
-* **Tools to master:** gdb, radare2/ghidra, pwntools, valgrind, ASan/UBSan, AFL/Honggfuzz, Wireshark, OpenSSL CLI।
-* **Documentation habit:** প্রতিটি মাসে তোমার findings/patches/tests একটি GitHub repo-তে রাখো — এটা তোমার portfolio।
-* **Community:** security mailing lists, GitHub issues, vulnerability disclosures পড়ো (বুঝে বুঝে)।
-* **Ethics:** কখনই পাবলিক exploit publish করো না যদি সেটা অনপ্যাচড প্রজেক্টের জন্য ক্ষতিকর হতে পারে — responsible disclosure पालन করো।
+**Description:** user↔kernel boundary, syscall reduction, seccomp profiles, kernel surface theory (drivers, syscalls)।
+**Purpose:** OS-level protections দিয়ে privilege escalation ও kernel exploits কমানো।
+**Focus projects / resources:** Linux kernel subsystems, simple driver examples
+**Tools:** kernel source tree, `strace`, `perf`, `kcov`, QEMU usermode
+**Practice:** seccomp sandbox তৈরি করে userland program harden করা
+**Milestone:** seccomp profile + reduced syscall report
 
 ---
 
-# প্রত্যাশিত ফলাফল ১২ মাস পর
+## Step 11 — Incident Response, Patching & Deployment (Expert)
 
-* C-code security auditing ও hardening-এ দক্ষতা।
-* Memory exploitation এবং mitigations-এর ভাল ধারণা (defensive emphasis)।
-* বড় ওপেন-সোর্স C প্রজেক্ট কিভাবে বুঝতে হয়, audit report তৈরি করতে পারবে।
-* একটি বাস্তব ক্যাপস্টোন প্রজেক্ট ও পোর্টফোলিও থাকবে — চাকরি/ফ্রিল্যান্স ইন্টারভিউতে দেখাতে পারবে।
+**Description:** vulnerability lifecycle (discovery → patch → disclosure), binary diffing, CI/CD security integration।
+**Purpose:** vulnerabilities দ্রুত patch করা ও safe disclosure practice আদি।
+**Focus projects / resources:** sample CVE patch workflow, Metasploit module analysis (structure)
+**Tools:** git patches, `bindiff`/radiff2, CI pipelines (GitHub Actions, GitLab CI)
+**Practice:** vuln patch তৈরি → test → mock PR → CI run
+**Milestone:** full pipeline doc (vuln → patch → deploy)
+
+---
+
+## Step 12 — Capstone Project & Portfolio (Expert)
+
+**Description:** A→Z synthesis করে বড় প্রজেক্ট (portfolio-ready)।
+**Purpose:** Job-ready proof of skills।
+**Capstone ideas:**
+
+* Secure HTTP proxy (TLS, seccomp, fuzzed)
+* Mini C vuln analyzer (semgrep rules + tests)
+* Hardened allocator (benchmarks + mitigations)
+  **Tools:** gcc/clang, fuzzers, CI, Docker labs
+  **Practice:** daily code + README + video demo + audit writeup
+  **Milestone:** polished repo + project summary for CV
+
+---
+
+# 📚 Additional Resources (cross-roadmap)
+
+* **CTF / Labs:** TryHackMe, HackTheBox, pwnable.kr, ROP Emporium
+* **Essential Tools:** `gdb`, radare2/Ghidra, pwntools, `valgrind`, ASan/TSan, honggfuzz/libFuzzer, Wireshark, tcpdump
+* **Books / Reading:** *Hacking: The Art of Exploitation*, *The Shellcoder's Handbook*, various kernel/source code docs
+* **Communities:** oss-security, r/netsec, local meetups, GitHub monthly findings repos
+* **Add-ons:** concurrency/race detection (TSan), coverage fuzzing (kcov + libFuzzer), CI security scanning
+
+---
+
+# ✅ প্রত্যাশিত ফলাফল
+
+* A→Z security দক্ষতা (auditing, exploits, hardening)
+* Portfolio: 12+ repos, capstone project, documented lab reports
+* Next steps: job applications, conference talks, responsible disclosures
+
+**⚠️ Disclaimer:** সব কাজ ethical lab-only. Responsible disclosure পালন করো।
+
+---
+
+# 🔎 Security A→Z — Tools / Techniques / Systems (expanded)
+
+> নিচে A থেকে Z পর্যন্ত উচ্চ-প্রাধান্য security tools, techniques এবং systems দেয়া হলো—সেগুলো রোডম্যাপের প্রতিটি ধাপকে সমৃদ্ধ করবে। (যা না থেকে থাকলে আমি যোগ করেছি)
+
+* **A — ASLR / ASan / Auditing**
+
+  * Tools: AddressSanitizer, ASLR testing scripts, `auditd` (Linux)
+  * Technique: memory sanitizer, static/dynamic audit
+
+* **B — Buffer overflow / Binary diffing**
+
+  * Tools: GDB, pwntools, `bindiff` / radiff2
+  * Technique: stack canary analysis, stack smashing protection tests
+
+* **C — Crypto / Constant-time / Code review**
+
+  * Tools: OpenSSL CLI, libsodium, `valgrind` (memcheck)
+  * Technique: constant-time patterns, key management checks
+
+* **D — Debugging / Dependency scanning / Disclosure**
+
+  * Tools: `gdb`, `strace`, OSS dependency scanners (e.g., `safety`, `dependabot`)
+  * Technique: vuln lifecycle management, disclosure playbooks
+
+* **E — Exploit dev / Electric Fence / E2E testing**
+
+  * Tools: Electric Fence, pwntools, QEMU
+  * Technique: controlled exploit development (lab-only), E2E regression tests
+
+* **F — Fuzzing / Format checks / FIM**
+
+  * Tools: honggfuzz, AFL, libFuzzer, `clang` format sanitizers
+  * Technique: structured fuzzing, corpus minimization, format vulnerability detection
+
+* **G — GDB / Gadget hunt / Git patching**
+
+  * Tools: GDB, ROPgadget, git workflows
+  * Technique: ROP gadget discovery, patch crafting
+
+* **H — Heap analysis / Hardening / HSTS**
+
+  * Tools: GDB heap helper scripts, Electric Fence, `setcap`/capabilities
+  * Technique: heap sanitizers, HSTS for web TLS, hardened allocator patterns
+
+* **I — Injection prevention / IDS / Input validation**
+
+  * Tools: semgrep, static analyzers, IDS (Snort/Suricata)
+  * Technique: canonicalization, parameterized parsing, whitelist input
+
+* **J — JSON/XML parsing security / JIT considerations**
+
+  * Tools: libxml2 secure parsing flags, JSON schema validators
+  * Technique: safe parser usage, deny big payloads (DoS guards)
+
+* **K — Kernel surface / Kcov / KASLR**
+
+  * Tools: kcov, `perf`, kernel config auditing
+  * Technique: syscall minimization, kernel patching practice
+
+* **L — Logging / Least privilege / Libc audits**
+
+  * Tools: `rsyslog`/`journald`, log aggregation (ELK), libc source audits
+  * Technique: least-privilege, audit logs for forensics
+
+* **M — Mitigations matrix / Memory tagging**
+
+  * Tools: platform mitigations (Hardened toolchains), Memory Tagging Extension (MTE) (where available)
+  * Technique: mitigation hardening comparisons
+
+* **N — Network monitoring / Nmap / NSS**
+
+  * Tools: Wireshark, tcpdump, nmap, NSS/OpenSSL
+  * Technique: protocol fuzzing, malformed packet handling
+
+* **O — OSINT / OWASP cases / OSS security lists**
+
+  * Tools: oss-security mailing list, OWASP static resources
+  * Technique: vulnerability disclosure timelines, CVE study
+
+* **P — Privilege separation / PIE / Patching**
+
+  * Tools: PIE compilation, package diff tools
+  * Technique: privilege separation patterns, responsible patch rollouts
+
+* **Q — QEMU / Queryable telemetry / QoS limits**
+
+  * Tools: QEMU for VM labs, telemetry frameworks
+  * Technique: resource limits, sandboxed testbeds
+
+* **R — ROP / Radare2 / Runtime checks**
+
+  * Tools: ROPgadget, radare2, runtime integrity checks
+  * Technique: gadget chaining, runtime attestation
+
+* **S — Seccomp / Sandboxing / Static analysis**
+
+  * Tools: seccomp filters, chroot/container sandboxes, clang static analyzer, semgrep
+  * Technique: syscall whitelisting, sandbox escape hardening
+
+* **T — Threat modeling / TSan / Timing attacks**
+
+  * Tools: ThreadSanitizer, timing measurement scripts
+  * Technique: threat models, race detection, timing side-channel tests
+
+* **U — Use-after-free detection / Unit tests / UX for security**
+
+  * Tools: ASan, fuzzers, unit test frameworks
+  * Technique: memory lifecycle enforcement, secure UX patterns
+
+* **V — Vulnerability scanning / Vulnerability disclosure platforms**
+
+  * Tools: OpenVAS, Nessus (where licensed), HackerOne/Bugcrowd (disclosure)
+  * Technique: scanning cadence, coordinated disclosure
+
+* **W — Web request smuggling / Wireshark / WAF**
+
+  * Tools: Wireshark, ModSecurity, synthetic HTTP fuzzers
+  * Technique: input canonicalization, WAF tuning
+
+* **X — eXploit chaining / eXecutable hardening**
+
+  * Tools: exploit frameworks (lab use), compiler hardening flags
+  * Technique: defense-in-depth to prevent chain exploitation
+
+* **Y — Yield (race conditions) / YAML/serialization checks**
+
+  * Tools: TSan, serialization validators
+  * Technique: atomic patterns, safe deserialization
+
+* **Z — Zero-day study / ZAP (OWASP) / Zlib edge cases**
+
+  * Tools: OWASP ZAP, historical zero-day case studies, zlib audits
+  * Technique: CVE timeline analysis, patch regression testing
+
+---
+
+# 🛠️ Quick Hardening Checklist (copyable)
+
+* Compile with: `-fstack-protector-strong -D_FORTIFY_SOURCE=2 -O2 -pie -fPIE`
+* Enable ASLR on test hosts
+* Run ASan/UBSan in CI for debug builds
+* Add seccomp profile for networked binaries
+* Use safe libc wrappers / explicit bounds checks
+* Add unit + fuzz tests for parsers (JSON/HTTP/CLI)
+* Audit third-party C libs (static analysis + fuzzing)
+
+---
+
+কোনটা বানাতে হবে?
